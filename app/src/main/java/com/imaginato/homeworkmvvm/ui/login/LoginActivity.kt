@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -25,12 +24,9 @@ import java.util.HashMap
 
 @KoinApiExtension
 class LoginActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityLoginBinding
     private val viewModel: LoginViewModel by viewModel()
-
     private val body = HashMap<String, Any>()
-
     private lateinit var db: DemoDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,8 +39,10 @@ class LoginActivity : AppCompatActivity() {
 
     private fun clickView() {
         binding.apply {
+            // Login button click event
             btnLogin.setOnClickListener {
                 var isError = false
+                // Check for Validation
                 if (etUsername.text.isNullOrBlank()) {
                     etUsername.setBackgroundResource(R.drawable.edit_error_bg);
                     txtEmailError.visibility= View.VISIBLE
@@ -59,14 +57,15 @@ class LoginActivity : AppCompatActivity() {
                     txtPasswordError.visibility= View.VISIBLE
                     isError = true
                 }
-
                 if(!isError){
                     etUsername.setBackgroundResource(R.drawable.edt_white_bg)
                     etPassword.setBackgroundResource(R.drawable.edt_white_bg)
+                    // Login Api call
                     callLoginApi()
                 }
             }
 
+            // Username text change event
             etUsername.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     charSequence: CharSequence?,
@@ -92,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
 
+            // Password text change event
             etPassword.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(
                     charSequence: CharSequence?,
@@ -119,6 +119,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    // Observer observes live data of Login data and X-acc and update ui
     private fun initObserve() {
         viewModel.resultLiveData.observe(this, Observer {
             if (!it?.data?.userName.isNullOrBlank()) {
@@ -147,6 +148,7 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
+    // Login api call
     private fun callLoginApi() {
         binding.apply {
             body.apply {

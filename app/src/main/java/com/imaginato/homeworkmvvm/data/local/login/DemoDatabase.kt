@@ -12,8 +12,11 @@ abstract class DemoDatabase : RoomDatabase() {
     abstract  fun  demoDao(): DemoDao
 
     companion object {
+        // Initialize Database instance
         @Volatile
         private var instance: DemoDatabase? = null;
+
+        // Instantiate Database instance
         fun getInstance(context: Context): DemoDatabase {
             if (instance == null) {
                 instance = Room.databaseBuilder(context,DemoDatabase::class.java,"user_db")

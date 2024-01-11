@@ -1,7 +1,5 @@
 package com.imaginato.homeworkmvvm.domain
 
-import android.app.Application
-import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -18,7 +16,6 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.BuildConfig
-import org.koin.android.ext.koin.androidApplication
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -27,6 +24,7 @@ import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://ifconfig.me/"
 
+// Network modules
 val netModules = module {
     single { provideInterceptors() }
     single { provideOkHttpClient() }
@@ -34,16 +32,19 @@ val netModules = module {
     single { provideGson() }
 }
 
+// Api call modules
 val apiModules = module {
     single { provideDemoApi(get()) }
     single { provideLoginApi(get()) }
 }
 
+// Repository modules
 val repositoryModules = module {
     single { provideDemoRepo(get()) }
     single { provideLoginRepo(get()) }
 }
 
+// View modal modules
 val viewModelModules = module {
     viewModel {
         MainActivityViewModel()

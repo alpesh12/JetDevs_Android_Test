@@ -9,5 +9,4 @@ import retrofit2.http.Url
 interface LoginApi {
     @POST
     suspend fun loginAsync(@Url url: String, @Body body: HashMap<String, Any>): Response<LoginModel>
-
 }

@@ -1,6 +1,5 @@
 package com.imaginato.homeworkmvvm.data.local.demo
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

@@ -5,7 +5,5 @@ import kotlinx.coroutines.flow.Flow
 import java.util.HashMap
 
 interface LoginRepository {
-
     suspend fun getLoginData(body: HashMap<String, Any>): Flow<Pair<LoginModel?, String?>>
-
 }
