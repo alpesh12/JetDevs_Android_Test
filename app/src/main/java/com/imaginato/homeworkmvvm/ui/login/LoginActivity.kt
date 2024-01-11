@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -43,16 +44,23 @@ class LoginActivity : AppCompatActivity() {
     private fun clickView() {
         binding.apply {
             btnLogin.setOnClickListener {
+                var isError = false
                 if (etUsername.text.isNullOrBlank()) {
                     etUsername.setBackgroundResource(R.drawable.edit_error_bg);
-                    Toast.makeText(this@LoginActivity, "Please Enter Email", Toast.LENGTH_SHORT)
-                        .show()
-                } else if (etPassword.text.isNullOrBlank()) {
+                    txtEmailError.visibility= View.VISIBLE
+                    isError = true
+                }
+                if (etPassword.text.isNullOrBlank()) {
                     etPassword.setBackgroundResource(R.drawable.edit_error_bg);
-                    Toast.makeText(this@LoginActivity, "Please Enter Password", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    //Api Call
+                    txtPasswordError.visibility= View.VISIBLE
+                    isError = true
+                }else if(etPassword.text!!.length < 8){
+                    txtPasswordError.setText("Password must be of 8 character")
+                    txtPasswordError.visibility= View.VISIBLE
+                    isError = true
+                }
+
+                if(!isError){
                     etUsername.setBackgroundResource(R.drawable.edt_white_bg)
                     etPassword.setBackgroundResource(R.drawable.edt_white_bg)
                     callLoginApi()
@@ -74,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
                     before: Int,
                     count: Int
                 ) {
+                    txtEmailError.visibility= View.GONE
                     if (count > 0) {
                         etUsername.setBackgroundResource(R.drawable.edt_white_bg)
                     }
@@ -98,6 +107,7 @@ class LoginActivity : AppCompatActivity() {
                     before: Int,
                     count: Int
                 ) {
+                    txtPasswordError.visibility= View.GONE
                     if (count > 0) {
                         etPassword.setBackgroundResource(R.drawable.edt_white_bg)
                     }

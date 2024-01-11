@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.imaginato.homeworkmvvm.data.remote.login.LoginRepository
 import com.imaginato.homeworkmvvm.data.remote.login.responce.LoginModel
 import com.imaginato.homeworkmvvm.ui.base.BaseViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
@@ -15,14 +16,17 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.inject
-import java.util.HashMap
+
 
 @KoinApiExtension
-class LoginViewModel : BaseViewModel() {
+class LoginViewModel(
+) : BaseViewModel() {
     private val repository: LoginRepository by inject()
     private var _resultLiveData: MutableLiveData<LoginModel?> = MutableLiveData()
     private var _headerData: MutableLiveData<String?> = MutableLiveData()
     private var _progress: MutableLiveData<Boolean> = MutableLiveData()
+    var user: MutableLiveData<LoginModel>? = null
+    private var errorMessage: MutableLiveData<String>? = null
     val progress: LiveData<Boolean>
         get() {
             return _progress
@@ -36,8 +40,10 @@ class LoginViewModel : BaseViewModel() {
         get() {
             return _headerData
         }
+    /**
+     * Do something and handle business logic here
+     * */
 
-    @SuppressLint("LogNotTimber")
     fun getLoginData(body: HashMap<String, Any>) {
         viewModelScope.launch {
             repository.getLoginData(body)
@@ -57,4 +63,31 @@ class LoginViewModel : BaseViewModel() {
         }
 
     }
+
+
+    suspend fun login(body: HashMap<String, Any>?) {
+        try {
+            body?.let {
+                val loggedInUser: Flow<Pair<LoginModel?, String?>> = repository.getLoginData(body )
+                loggedInUser .onStart {
+                        _progress.value = true
+                    }
+                    .catch {
+                        _progress.value = false
+                    }
+                    .onCompletion {
+                    }
+                    .collect { (loginModel, headers) ->
+                        user?.setValue(loginModel)
+                    }
+                errorMessage!!.setValue(null)
+            }
+
+        } catch (e: Exception) {
+            user!!.setValue(null)
+            errorMessage!!.setValue(e.message)
+        }
+    }
+
+
 }
