@@ -4,9 +4,10 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "Demo")
+@Entity(tableName = "user_db")
 data class Demo constructor(
-    @PrimaryKey
-    val id: Long,
-    @ColumnInfo(name = "name") var name: String
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+    val name: String,
+    val token: String
 )

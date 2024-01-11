@@ -8,9 +8,16 @@ import android.text.TextWatcher
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.imaginato.homeworkmvvm.R
+import com.imaginato.homeworkmvvm.data.local.demo.Demo
+import com.imaginato.homeworkmvvm.data.local.login.DemoDatabase
 import com.imaginato.homeworkmvvm.databinding.ActivityLoginBinding
 import com.imaginato.homeworkmvvm.ui.demo.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinApiExtension
 import java.util.HashMap
@@ -22,6 +29,8 @@ class LoginActivity : AppCompatActivity() {
     private val viewModel: LoginViewModel by viewModel()
 
     private val body = HashMap<String, Any>()
+
+    private lateinit var db: DemoDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,9 +53,9 @@ class LoginActivity : AppCompatActivity() {
                         .show()
                 } else {
                     //Api Call
-                    etUsername.setBackgroundResource(R.drawable.edt_white_bg);
-                    etPassword.setBackgroundResource(R.drawable.edt_white_bg);
-                    callLoginApi();
+                    etUsername.setBackgroundResource(R.drawable.edt_white_bg)
+                    etPassword.setBackgroundResource(R.drawable.edt_white_bg)
+                    callLoginApi()
                 }
             }
 
@@ -66,7 +75,7 @@ class LoginActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (count > 0) {
-                        etUsername.setBackgroundResource(R.drawable.edt_white_bg);
+                        etUsername.setBackgroundResource(R.drawable.edt_white_bg)
                     }
                 }
 
@@ -90,7 +99,7 @@ class LoginActivity : AppCompatActivity() {
                     count: Int
                 ) {
                     if (count > 0) {
-                        etPassword.setBackgroundResource(R.drawable.edt_white_bg);
+                        etPassword.setBackgroundResource(R.drawable.edt_white_bg)
                     }
                 }
 
@@ -104,6 +113,22 @@ class LoginActivity : AppCompatActivity() {
         viewModel.resultLiveData.observe(this, Observer {
             if (!it?.data?.userName.isNullOrBlank()) {
                 startActivity(Intent(this, MainActivity::class.java))
+            }
+        })
+
+        viewModel.headerData.observe(this@LoginActivity, Observer {
+            lifecycleScope.launch {
+                db = DemoDatabase.getInstance(this@LoginActivity)
+                val user = Demo(name = binding.etUsername.text.toString(), token = it.toString())
+                withContext(Dispatchers.IO) {
+                    db.demoDao().insertDemo(user)
+                }
+                startActivity(
+                    Intent(this@LoginActivity, MainActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+                finish()
+                delay(1000)
             }
         })
 

@@ -5,8 +5,6 @@ import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.imaginato.homeworkmvvm.data.local.demo.DemoDatabase
-import com.imaginato.homeworkmvvm.data.local.demo.DemoDao
 import com.imaginato.homeworkmvvm.data.remote.demo.DemoApi
 import com.imaginato.homeworkmvvm.data.remote.demo.DemoDataRepository
 import com.imaginato.homeworkmvvm.data.remote.demo.DemoRepository
@@ -28,11 +26,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://ifconfig.me/"
-
-val databaseModule = module {
-    single { provideDatabase(androidApplication()) }
-    single { provideDao(get()) }
-}
 
 val netModules = module {
     single { provideInterceptors() }
@@ -69,16 +62,6 @@ private fun provideLoginRepo(api: LoginApi): LoginRepository {
 private fun provideDemoApi(retrofit: Retrofit): DemoApi = retrofit.create(DemoApi::class.java)
 
 private fun provideLoginApi(retrofit: Retrofit): LoginApi = retrofit.create(LoginApi::class.java)
-
-private fun provideDatabase(application: Application): DemoDatabase {
-    return Room.databaseBuilder(application, DemoDatabase::class.java, "I-Database")
-        .fallbackToDestructiveMigration()
-        .build()
-}
-
-private fun provideDao(database: DemoDatabase): DemoDao {
-    return database.demoDao
-}
 
 private fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()

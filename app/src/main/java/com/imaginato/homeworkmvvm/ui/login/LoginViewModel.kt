@@ -36,9 +36,7 @@ class LoginViewModel : BaseViewModel() {
         get() {
             return _headerData
         }
-    /**
-     * Do something and handle business logic here
-     * */
+
     @SuppressLint("LogNotTimber")
     fun getLoginData(body: HashMap<String, Any>) {
         viewModelScope.launch {
@@ -55,9 +53,6 @@ class LoginViewModel : BaseViewModel() {
                     _progress.value = false
                     _resultLiveData.value = loginModel
                     _headerData.value = headers
-
-                    Log.i("gdfgdfgdcfgfc","headers====="+headers.toString())
-
                 }
         }
 

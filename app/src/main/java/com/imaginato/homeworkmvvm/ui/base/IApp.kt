@@ -2,7 +2,6 @@ package com.imaginato.homeworkmvvm.ui.base
 
 import android.app.Application
 import com.imaginato.homeworkmvvm.domain.apiModules
-import com.imaginato.homeworkmvvm.domain.databaseModule
 import com.imaginato.homeworkmvvm.domain.netModules
 import com.imaginato.homeworkmvvm.domain.repositoryModules
 import com.imaginato.homeworkmvvm.domain.viewModelModules
@@ -22,7 +21,7 @@ class IApp : Application() {
             androidLogger(Level.ERROR)
             androidContext(this@IApp)
             modules(
-                databaseModule, netModules, apiModules, repositoryModules, viewModelModules
+                 netModules, apiModules, repositoryModules, viewModelModules
             )
         }
     }
