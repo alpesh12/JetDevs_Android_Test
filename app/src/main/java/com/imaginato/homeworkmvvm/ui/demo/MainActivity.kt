@@ -18,18 +18,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.btnDemo.setOnClickListener {
-            viewModel.getDemoData()
-        }
-        initObserve()
-    }
 
-    private fun initObserve() {
-        viewModel.resultLiveData.observe(this, Observer {
-            binding.tvResult.text = it
-        })
-        viewModel.progress.observe(this, Observer {
-            binding.pbLoading.isVisible = it
-        })
     }
 }

@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_vertical"
-    android:gravity="center_vertical"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="50dp"
@@ -57,7 +56,10 @@
         android:background="@drawable/edt_white_bg"
         android:hint="Username"
         android:padding="12dp"
+        android:imeOptions="actionNext"
         android:textColorHint="@color/gray_dark"
+        android:nextFocusForward="@id/etPassword"
+        android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +74,9 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/edt_white_bg"
         android:hint="Password"
+        android:singleLine="true"
         android:padding="12dp"
+        android:imeOptions="actionDone"
         android:textColorHint="@color/gray_dark"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
